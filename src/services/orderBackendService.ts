@@ -70,8 +70,10 @@ export interface AdminOrderRow {
 export interface PublicTagRelayData {
   isValid: boolean;
   status: 'pending' | 'printed' | 'shipped' | 'active' | 'inactive';
+  tagId?: string;
   vehicleNumber: string;
   vehicleType: string;
+  ownerName: string;
   maskedName: string;
   phoneNumber: string;
   guardianNumber: string;
@@ -755,8 +757,10 @@ class OrderBackendService {
           return {
             isValid: true,
             status: data.status,
+            tagId: data.id,
             vehicleNumber: veh.vehicle_number || 'VEHICLE',
             vehicleType: veh.vehicle_type || 'Car',
+            ownerName: cust.full_name || 'Vehicle Owner',
             maskedName: (cust.full_name || 'Driver').split(' ')[0],
             phoneNumber: cust.phone_number || '',
             guardianNumber: cust.guardian_number || '',
@@ -783,8 +787,10 @@ class OrderBackendService {
       return {
         isValid: true,
         status: found.status,
+        tagId: found.tag_id,
         vehicleNumber: found.vehicle_number,
         vehicleType: found.vehicle_type,
+        ownerName: found.customer_name,
         maskedName: found.customer_name.split(' ')[0],
         phoneNumber: found.phone_number,
         guardianNumber: found.guardian_number,
@@ -797,8 +803,10 @@ class OrderBackendService {
       return {
         isValid: true,
         status: 'active',
+        tagId: 'demo-tag-hassan',
         vehicleNumber: 'LEA-2024',
         vehicleType: 'Sedan (Honda Civic)',
+        ownerName: 'Hassan Raza',
         maskedName: 'Hassan',
         phoneNumber: '0300-8451290',
         guardianNumber: '0321-4458912',
@@ -807,6 +815,32 @@ class OrderBackendService {
     }
 
     return null;
+  }
+
+  /**
+   * Log each scan event to Supabase or local storage audit trail
+   */
+  async logTagScan(token: string, tagId?: string): Promise<void> {
+    const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : 'Unknown';
+
+    // 1. Supabase log
+    if (supabase && isSupabaseConfigured() && tagId) {
+      try {
+        await supabase.from('tag_scans').insert({
+          tag_id: tagId,
+          user_agent: userAgent,
+        });
+      } catch (err) {
+        console.warn('Could not log scan to Supabase:', err);
+      }
+    }
+
+    // 2. Local storage scan counter
+    try {
+      const scanKey = `scan_count_${token}`;
+      const count = Number(localStorage.getItem(scanKey) || 0);
+      localStorage.setItem(scanKey, String(count + 1));
+    } catch {}
   }
 
   /**

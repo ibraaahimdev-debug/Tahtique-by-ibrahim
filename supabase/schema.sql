@@ -175,7 +175,31 @@ CREATE POLICY "Allow update on orders"
     USING (true);
 
 -- ==============================================================================
--- 9. RPC Function: Public Minimal Relay Lookup
+-- 9. TABLE: tag_scans (Audit log for QR scans)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.tag_scans (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    tag_id UUID REFERENCES public.tags(id) ON DELETE CASCADE,
+    scanned_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    user_agent TEXT,
+    ip_address TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_tag_scans_tag_id ON public.tag_scans (tag_id);
+CREATE INDEX IF NOT EXISTS idx_tag_scans_scanned_at ON public.tag_scans (scanned_at DESC);
+
+ALTER TABLE public.tag_scans ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public insert to tag_scans"
+    ON public.tag_scans FOR INSERT
+    WITH CHECK (true);
+
+CREATE POLICY "Allow read of tag_scans"
+    ON public.tag_scans FOR SELECT
+    USING (true);
+
+-- ==============================================================================
+-- 10. RPC Function: Public Minimal Relay Lookup
 -- Returns ONLY what's needed for the emergency contact relay
 -- Keeps address and private customer metadata concealed
 -- ==============================================================================
@@ -186,7 +210,7 @@ RETURNS TABLE (
     tag_material TEXT,
     vehicle_number TEXT,
     vehicle_type TEXT,
-    masked_name TEXT,
+    owner_name TEXT,
     phone_number TEXT,
     guardian_number TEXT,
     is_valid BOOLEAN
@@ -199,8 +223,7 @@ BEGIN
         t.tag_material,
         v.vehicle_number,
         v.vehicle_type,
-        -- Conceal full identity: provide first name or initials
-        split_part(c.full_name, ' ', 1) AS masked_name,
+        c.full_name AS owner_name,
         c.phone_number,
         c.guardian_number,
         true AS is_valid
