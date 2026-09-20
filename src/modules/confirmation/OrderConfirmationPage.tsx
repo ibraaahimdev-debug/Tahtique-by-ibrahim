@@ -18,8 +18,10 @@ import {
   Home,
   Check,
   MessageSquare,
+  Download,
 } from 'lucide-react';
 import type { OrderFormData } from '../../types/order';
+import { orderBackendService } from '../../services/orderBackendService';
 
 interface OrderConfirmationPageProps {
   orderId?: string;
@@ -47,12 +49,26 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
   const materialUpgradeCost = selectedMaterial.extraPrice * orderData.quantity;
   const grandTotal = basePrice + materialUpgradeCost;
 
+  const [downloadingIndex, setDownloadingIndex] = React.useState<number | null>(null);
+
   const handleOpenWhatsApp = () => {
     window.open('https://wa.me/923292082080', '_blank');
   };
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadTag = async (idx: number, plate: string, type: string) => {
+    setDownloadingIndex(idx);
+    try {
+      const token = `token-${orderId.toLowerCase()}-${idx + 1}-${plate.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+      await orderBackendService.downloadTagQRPng(token, plate, type);
+    } catch (e) {
+      console.error('Download error:', e);
+    } finally {
+      setDownloadingIndex(null);
+    }
   };
 
   return (
@@ -192,29 +208,45 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {orderData.vehicles.map((v, i) => (
-                <div
-                  key={i}
-                  className="p-3.5 rounded-2xl bg-[#EAD9EC]/20 border border-[#EAD9EC]/50 text-xs flex items-center justify-between"
-                >
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-[#5C3264]">#{i + 1}</span>
-                      <span className="font-bold text-[#1A1A1A] uppercase tracking-wider">
-                        {v.vehiclePlate || 'Plate set'}
-                      </span>
+              {orderData.vehicles.map((v, i) => {
+                const isDownloading = downloadingIndex === i;
+                const plateText = v.vehiclePlate || 'Plate set';
+                return (
+                  <div
+                    key={i}
+                    className="p-3.5 rounded-2xl bg-[#EAD9EC]/20 border border-[#EAD9EC]/50 text-xs flex items-center justify-between gap-2"
+                  >
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-[#5C3264]">#{i + 1}</span>
+                        <span className="font-bold text-[#1A1A1A] uppercase tracking-wider">
+                          {plateText}
+                        </span>
+                      </div>
+                      <p className="text-[#8A8A8A] mt-0.5">
+                        Owner: <span className="text-[#1A1A1A]">{v.ownerName || 'Customer'}</span>
+                      </p>
                     </div>
-                    <p className="text-[#8A8A8A] mt-0.5">
-                      Owner: <span className="text-[#1A1A1A]">{v.ownerName || 'Alex'}</span>
-                    </p>
-                  </div>
 
-                  <div className="flex items-center gap-1 text-[11px] text-[#5C3264] bg-white px-2 py-1 rounded-lg border border-[#EAD9EC] shrink-0">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Relay Active</span>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        disabled={isDownloading}
+                        onClick={() => handleDownloadTag(i, plateText, v.vehicleType || 'Car')}
+                        className="px-2.5 py-1.5 rounded-xl bg-white hover:bg-gray-50 border border-[#5C3264]/20 text-[#5C3264] font-bold text-[11px] transition-all flex items-center gap-1 shadow-xs cursor-pointer active:scale-95"
+                        title="Download print-ready QR PNG"
+                      >
+                        <Download className={`w-3 h-3 ${isDownloading ? 'animate-bounce' : ''}`} />
+                        <span>{isDownloading ? '...' : 'Download QR'}</span>
+                      </button>
+
+                      <div className="flex items-center gap-1 text-[11px] text-[#5C3264] bg-white px-2 py-1 rounded-lg border border-[#EAD9EC] shrink-0">
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

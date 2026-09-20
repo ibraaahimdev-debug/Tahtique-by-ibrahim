@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import type { OrderFormData } from '../../types/order';
 import { Glass3DCardPreview } from './components/Glass3DCardPreview';
+import { orderBackendService } from '../../services/orderBackendService';
 
 interface OrderCustomisePageProps {
   initialPackageId?: string;
@@ -129,13 +130,20 @@ export const OrderCustomisePage: React.FC<OrderCustomisePageProps> = ({
   };
 
   // Main order placement handler
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    const randomId = `TGT-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    try {
+      // Store in Supabase + local backend service and generate QR tokens
+      await orderBackendService.createOrderWithTags(formData, randomId);
+    } catch (err) {
+      console.warn('Backend order submission warning:', err);
+    }
 
     setTimeout(() => {
-      const randomId = `TGT-${Math.floor(100000 + Math.random() * 900000)}`;
       setConfirmedOrderId(randomId);
       setIsSubmitting(false);
       setIsOrderPlaced(true);
@@ -148,7 +156,7 @@ export const OrderCustomisePage: React.FC<OrderCustomisePageProps> = ({
       }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 600);
+    }, 400);
   };
 
   return (

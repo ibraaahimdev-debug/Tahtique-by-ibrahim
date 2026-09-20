@@ -3,6 +3,7 @@ import { Search, QrCode, RefreshCw, Download, Check, ExternalLink } from 'lucide
 import { INITIAL_ADMIN_QR_CODES } from '../../data/adminMockData';
 import type { AdminQRCodeItem } from '../../types/admin';
 import { vehicleService } from '../../services/vehicleService';
+import { orderBackendService } from '../../services/orderBackendService';
 import type { VehicleRecord } from '../../types/vehicle';
 
 interface QRCodeManagementPageProps {
@@ -59,8 +60,8 @@ export const QRCodeManagementPage: React.FC<QRCodeManagementPageProps> = ({
     }, 600);
   };
 
-  // Download real vector SVG
-  const handleDownload = (item: AdminQRCodeItem) => {
+  // Download real vector SVG or PNG badge
+  const handleDownload = async (item: AdminQRCodeItem) => {
     setDownloadedId(item.id);
     const foundVeh = vehicles.find(
       (v) =>
@@ -68,20 +69,23 @@ export const QRCodeManagementPage: React.FC<QRCodeManagementPageProps> = ({
         item.plateNumber.toUpperCase().includes(v.plate_number.toUpperCase())
     );
 
-    if (foundVeh?.qr_svg_url) {
+    if (foundVeh?.qr_svg_url && foundVeh.qr_svg_url.startsWith('http')) {
       const a = document.createElement('a');
       a.href = foundVeh.qr_svg_url;
-      a.download = `TAGTIQUE-${foundVeh.state}-${foundVeh.plate_number}.svg`;
+      a.download = `TAHTIQUE-${foundVeh.state}-${foundVeh.plate_number}.svg`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
     } else {
-      alert(`Exporting vector print asset for ${item.plateNumber}...`);
+      await orderBackendService.downloadTagQRPng(
+        foundVeh?.qr_token || `token-${item.qrId.toLowerCase()}`,
+        item.plateNumber
+      );
     }
 
     setTimeout(() => {
       setDownloadedId(null);
-    }, 1500);
+    }, 1200);
   };
 
   return (

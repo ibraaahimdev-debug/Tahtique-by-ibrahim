@@ -31,11 +31,23 @@ export type AppView =
 function getInitialScanToken(): string | null {
   if (typeof window === 'undefined') return null;
   const path = window.location.pathname;
+  if (path.startsWith('/tag/')) {
+    const token = path.replace('/tag/', '').trim();
+    if (token) return token;
+  }
   if (path.startsWith('/v/')) {
     const token = path.replace('/v/', '').trim();
     if (token) return token;
   }
   const hash = window.location.hash;
+  if (hash.startsWith('#/tag/')) {
+    const token = hash.replace('#/tag/', '').trim();
+    if (token) return token;
+  }
+  if (hash.startsWith('#tag/')) {
+    const token = hash.replace('#tag/', '').trim();
+    if (token) return token;
+  }
   if (hash.startsWith('#/v/')) {
     const token = hash.replace('#/v/', '').trim();
     if (token) return token;
@@ -45,6 +57,9 @@ function getInitialScanToken(): string | null {
     if (token) return token;
   }
   const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.get('tag')) {
+    return searchParams.get('tag');
+  }
   if (searchParams.get('v')) {
     return searchParams.get('v');
   }
