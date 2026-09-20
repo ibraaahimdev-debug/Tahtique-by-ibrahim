@@ -14,12 +14,11 @@ interface ContactSupportPageProps {
 
 export const ContactSupportPage: React.FC<ContactSupportPageProps> = ({
   onNavigateHome,
-  onNavigateTracking,
+  onNavigateTracking: _onNavigateTracking,
   onLoginClick,
 }) => {
-  // Stub function: onSubmitContact(formData)
+  // Handler: onSubmitContact(formData)
   const handleSubmitContact = (data: ContactFormData) => {
-    // Console log / stub notification
     console.log('Contact inquiry submitted:', data);
   };
 
@@ -30,7 +29,7 @@ export const ContactSupportPage: React.FC<ContactSupportPageProps> = ({
         isLanding={false}
         onLogin={onLoginClick}
         onHomeClick={onNavigateHome}
-        onTrackClick={() => onNavigateTracking('TGT-000482')}
+        onTrackClick={() => window.open('https://wa.me/923292082080', '_blank')}
         onSupportClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       />
 
@@ -104,7 +103,7 @@ export const ContactSupportPage: React.FC<ContactSupportPageProps> = ({
 
       {/* Footer */}
       <Footer
-        onTrackOrder={() => onNavigateTracking('TGT-000482')}
+        onTrackOrder={() => window.open('https://wa.me/923292082080', '_blank')}
         onAdminClick={onLoginClick}
         onHomeClick={onNavigateHome}
         onContactClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

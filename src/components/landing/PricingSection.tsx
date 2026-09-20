@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card } from '../common/Card';
 import { Button } from '../common/Button';
 import { PRICING_PACKAGES } from '../../data/mockData';
-import { Check, Sparkles, ShieldCheck, ArrowRight, Building2, X, Send, Calculator } from 'lucide-react';
+import { Check, Star, ShieldCheck, ArrowRight, Building2, X, Send, Calculator } from 'lucide-react';
 
 interface PricingSectionProps {
   onSubmitOrder: (packageId: string) => void;
@@ -40,7 +40,7 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSubmitOrder })
   };
 
   return (
-    <section id="pricing" className="py-20 md:py-28 relative overflow-hidden bg-transparent">
+    <section id="pricing" className="py-20 md:py-28 relative overflow-hidden bg-transparent scroll-mt-24">
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-0">
         {/* Header */}
@@ -75,8 +75,8 @@ export const PricingSection: React.FC<PricingSectionProps> = ({ onSubmitOrder })
                 {/* Most Popular Badge for Pack of 2 */}
                 {isPopular && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20">
-                    <div className="bg-gradient-to-r from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] text-[#1E293B] text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-md flex items-center gap-1.5 border border-white/80">
-                      <Sparkles className="w-3.5 h-3.5 text-[#5C3264]" />
+                    <div className="bg-[#1A1A1A] text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wider shadow-md flex items-center gap-1.5 border border-white/20">
+                      <Star className="w-3 h-3 text-[#EAD9EC] fill-[#EAD9EC]" />
                       <span>{pkg.badge || 'Most Popular'}</span>
                     </div>
                   </div>

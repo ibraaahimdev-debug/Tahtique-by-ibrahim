@@ -11,9 +11,11 @@ export interface VehicleDetails {
   id?: string;
   ownerName: string;
   contactNumber: string;
+  guardianContact?: string;
   vehiclePlate: string;
   state?: string;
   vehicleModel?: string;
+  vehicleType?: string;
   qrToken?: string;
   qrSvgUrl?: string | null;
   qrGeneratedAt?: string | null;

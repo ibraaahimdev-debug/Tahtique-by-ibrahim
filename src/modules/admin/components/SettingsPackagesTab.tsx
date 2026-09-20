@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PRICING_PACKAGES } from '../../../data/mockData';
-import { Plus, Edit2, Trash2, Check, X, Sparkles } from 'lucide-react';
+import { Plus, Edit2, Trash2, Check, X, Star } from 'lucide-react';
 import type { PricingPackage } from '../../../types';
 
 export const SettingsPackagesTab: React.FC = () => {
@@ -145,7 +145,7 @@ export const SettingsPackagesTab: React.FC = () => {
           >
             {pkg.popular && (
               <div className="absolute -top-2.5 right-4 bg-gradient-to-r from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] text-[#1E293B] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs border border-white/80">
-                <Sparkles className="w-3 h-3 text-[#5C3264]" />
+                <Star className="w-2.5 h-2.5 fill-current text-[#5C3264]" />
                 <span>Most Popular</span>
               </div>
             )}

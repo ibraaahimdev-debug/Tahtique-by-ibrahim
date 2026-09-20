@@ -14,17 +14,17 @@ import {
   MapPin,
   Clock,
   Printer,
-  Sparkles,
-  ArrowRight,
+  Shield,
   Home,
   Check,
+  MessageSquare,
 } from 'lucide-react';
 import type { OrderFormData } from '../../types/order';
 
 interface OrderConfirmationPageProps {
   orderId?: string;
   orderData: OrderFormData;
-  onNavigateTracking: (orderId: string) => void;
+  onNavigateTracking?: (orderId?: string) => void;
   onNavigateHome: () => void;
   onLoginClick?: () => void;
   onNavigateSupport?: () => void;
@@ -33,10 +33,10 @@ interface OrderConfirmationPageProps {
 export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
   orderId = 'TGT-000482',
   orderData,
-  onNavigateTracking,
+  onNavigateTracking: _onNavigateTracking,
   onNavigateHome,
   onLoginClick,
-  onNavigateSupport,
+  onNavigateSupport: _onNavigateSupport,
 }) => {
   const selectedPackage =
     PRICING_PACKAGES.find((p) => p.id === orderData.packageId) || PRICING_PACKAGES[1];
@@ -46,6 +46,10 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
   const basePrice = selectedPackage.price;
   const materialUpgradeCost = selectedMaterial.extraPrice * orderData.quantity;
   const grandTotal = basePrice + materialUpgradeCost;
+
+  const handleOpenWhatsApp = () => {
+    window.open('https://wa.me/923292082080', '_blank');
+  };
 
   const handlePrint = () => {
     window.print();
@@ -58,8 +62,8 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
         isLanding={false}
         onLogin={onLoginClick}
         onHomeClick={onNavigateHome}
-        onTrackClick={() => onNavigateTracking(orderId)}
-        onSupportClick={onNavigateSupport}
+        onTrackClick={handleOpenWhatsApp}
+        onSupportClick={handleOpenWhatsApp}
       />
 
       <main className="flex-1 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 w-full relative z-10">
@@ -67,8 +71,8 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
         <div className="text-center space-y-4 mb-10">
           <div className="relative mx-auto w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-gradient-to-tr from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] text-[#1E293B] flex items-center justify-center shadow-[0_15px_35px_rgba(234,217,236,0.7)] animate-float border border-white/80">
             <CheckCircle2 className="w-12 h-12 stroke-[2.2]" />
-            <div className="absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full bg-[#FFD4E9] text-[#5C3264] flex items-center justify-center shadow-sm border border-white/60">
-              <Sparkles className="w-4 h-4" />
+            <div className="absolute -top-1.5 -right-1.5 w-7 h-7 rounded-full bg-[#5C3264] text-white flex items-center justify-center shadow-sm border border-white/60">
+              <Shield className="w-3.5 h-3.5" />
             </div>
           </div>
 
@@ -112,15 +116,17 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
             >
               Print Receipt
             </Button>
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => onNavigateTracking(orderId)}
-              icon={<ArrowRight className="w-4 h-4" />}
-              className="flex-1 sm:flex-initial shadow-md"
+            <a
+              href={`https://wa.me/923292082080?text=${encodeURIComponent(
+                `Hello Tagtique! I placed Order #${orderId}. Please confirm my order dispatch.`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 sm:flex-initial px-5 py-2 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm shadow-md flex items-center justify-center gap-1.5 transition-all cursor-pointer active:scale-95"
             >
-              Track Your Order
-            </Button>
+              <MessageSquare className="w-3.5 h-3.5 fill-current" />
+              <span>WhatsApp: 0329-2082080</span>
+            </a>
           </div>
         </div>
 
@@ -242,23 +248,25 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
           >
             Back to Home
           </Button>
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => onNavigateTracking(orderId)}
-            icon={<ArrowRight className="w-4 h-4" />}
-            className="w-full sm:w-auto shadow-lg"
+          <a
+            href={`https://wa.me/923292082080?text=${encodeURIComponent(
+              `Hello Tagtique! I placed Order #${orderId}. Please confirm my order dispatch.`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer active:scale-98"
           >
-            Track Order #{orderId}
-          </Button>
+            <MessageSquare className="w-4 h-4 fill-current" />
+            <span>Contact on WhatsApp: 0329-2082080</span>
+          </a>
         </div>
       </main>
 
       {/* Footer */}
       <Footer
-        onTrackOrder={() => onNavigateTracking(orderId)}
+        onTrackOrder={handleOpenWhatsApp}
         onAdminClick={onLoginClick}
-        onContactClick={onNavigateSupport}
+        onContactClick={handleOpenWhatsApp}
         onHomeClick={onNavigateHome}
       />
     </div>

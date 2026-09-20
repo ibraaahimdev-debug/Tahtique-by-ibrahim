@@ -77,7 +77,7 @@ export const TAG_MATERIALS: TagMaterial[] = [
     description: 'Ultra-durable, UV-matte laminated flexible vinyl. Mounts smoothly on the inside or outside of windshield glass. Pressure-washer & wiper safe.',
     badge: 'Recommended (Included)',
     extraPrice: 0,
-    iconName: 'Sparkles',
+    iconName: 'Layers',
   },
   {
     id: 'acrylic-hard-tag',
@@ -121,14 +121,18 @@ export const INITIAL_ORDER_STATE: OrderFormData = {
     {
       ownerName: '',
       contactNumber: '',
+      guardianContact: '',
       vehiclePlate: '',
       vehicleModel: '',
+      vehicleType: 'Car',
     },
     {
       ownerName: '',
       contactNumber: '',
+      guardianContact: '',
       vehiclePlate: '',
       vehicleModel: '',
+      vehicleType: 'Car',
     },
   ],
   delivery: {
@@ -147,5 +151,5 @@ export const INITIAL_ORDER_STATE: OrderFormData = {
     billingCity: '',
     billingPostalCode: '',
   },
-  paymentMethod: 'card',
+  paymentMethod: 'cod',
 };

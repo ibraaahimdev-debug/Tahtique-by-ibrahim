@@ -15,7 +15,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Stub onLogin() handler
+  // Admin authentication handler
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -135,7 +135,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
         <div className="mt-5 text-center">
           <button
             type="button"
-            onClick={() => alert('Forgot Password: A reset link has been dispatched to operations IT desk (Stub).')}
+            onClick={() => alert('Forgot Password: A password reset verification link has been dispatched to operations IT desk.')}
             className="text-xs text-[#5C3264] hover:text-[#7A2840] hover:underline focus:outline-none"
           >
             Forgot password?

@@ -3,7 +3,6 @@ import { LandingPage } from './modules/landing/LandingPage';
 import { OrderCustomisePage } from './modules/order/OrderCustomisePage';
 import { CheckoutPage } from './modules/checkout/CheckoutPage';
 import { OrderConfirmationPage } from './modules/confirmation/OrderConfirmationPage';
-import { OrderTrackingPage } from './modules/tracking/OrderTrackingPage';
 import { ContactSupportPage } from './modules/contact/ContactSupportPage';
 import { AdminPortal } from './modules/admin/AdminPortal';
 import { PublicScanPage } from './modules/scan/PublicScanPage';
@@ -16,8 +15,9 @@ import {
 } from './data/adminMockData';
 import { vehicleService } from './services/vehicleService';
 import type { AdminOrder, AdminOrderStatus, AdminStaffNote } from './types/admin';
-import { Shield, ExternalLink } from 'lucide-react';
+import { Shield, ExternalLink, MessageSquare } from 'lucide-react';
 import type { OrderFormData } from './types/order';
+import { FloatingWhatsAppButton } from './components/common/FloatingWhatsAppButton';
 
 export type AppView =
   | 'landing'
@@ -272,11 +272,12 @@ export function App() {
     });
   };
 
-  // Navigate to Tracking page (Module 5)
-  const handleNavigateToTracking = (code: string) => {
-    setActiveTrackingCode(code || 'TGT-000482');
-    setCurrentView('tracking');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Direct WhatsApp contact (replaces tracking section)
+  const handleNavigateToTracking = (code?: string) => {
+    const text = code
+      ? `Hello Tagtique! I would like an update on order ${code}.`
+      : 'Hello Tagtique! I have an inquiry about my order.';
+    window.open(`https://wa.me/923292082080?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   // Navigate to Contact Support page (Module 6)
@@ -320,6 +321,7 @@ export function App() {
             <OrderCustomisePage
               initialPackageId={selectedPackageId}
               onSubmitOrder={handleSubmitOrderToCheckout}
+              onOrderSuccess={(orderId, data) => handlePaymentSuccess(orderId, data)}
               onNavigateHome={handleNavigateHome}
               onLoginClick={() => setCurrentPortal('admin')}
               onNavigateTracking={handleNavigateToTracking}
@@ -354,12 +356,40 @@ export function App() {
           )}
 
           {currentView === 'tracking' && (
-            <OrderTrackingPage
-              initialOrderId={activeTrackingCode}
-              onNavigateHome={handleNavigateHome}
-              onNavigateSupport={handleNavigateToContact}
-              onLoginClick={() => setCurrentPortal('admin')}
-            />
+            <div className="min-h-screen bg-[#FDFBFD] flex flex-col items-center justify-center p-6 text-center">
+              <div className="w-16 h-16 rounded-3xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 ring-8 ring-emerald-50/50 shadow-sm">
+                <MessageSquare className="w-8 h-8 fill-current" />
+              </div>
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100/70 px-3 py-1 rounded-full mb-2">
+                Direct WhatsApp Contact
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
+                Instant Order Support via WhatsApp
+              </h1>
+              <p className="text-sm text-gray-500 mt-2 max-w-md">
+                Order tracking and status updates are provided directly by our dispatch team on WhatsApp for immediate 1-on-1 assistance.
+              </p>
+              <div className="mt-6 flex flex-col sm:flex-row gap-3">
+                <a
+                  href={`https://wa.me/923292082080?text=${encodeURIComponent(
+                    activeTrackingCode ? `Hello Tagtique! I'd like an update on order #${activeTrackingCode}.` : 'Hello Tagtique! I have an order inquiry.'
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-3.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4 fill-current" />
+                  <span>Chat on WhatsApp: 0329-2082080</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={handleNavigateHome}
+                  className="px-6 py-3.5 rounded-full bg-white border border-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-50 cursor-pointer"
+                >
+                  Return to Homepage
+                </button>
+              </div>
+            </div>
           )}
 
           {currentView === 'contact' && (
@@ -376,6 +406,9 @@ export function App() {
               onNavigateHome={handleNavigateHome}
             />
           )}
+
+          {/* Floating WhatsApp Contact Button (Always accessible for customer) */}
+          <FloatingWhatsAppButton />
         </>
       )}
 

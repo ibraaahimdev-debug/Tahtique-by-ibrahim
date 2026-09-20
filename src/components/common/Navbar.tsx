@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from './Button';
-import { Menu, X, QrCode, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Menu, X, ShieldCheck, ArrowRight } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 
 export interface NavbarProps {
   onLogin?: () => void;
@@ -12,16 +13,26 @@ export interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  onLogin = () => alert('Login modal / flow (Stub - ready for auth)'),
+  onLogin: _onLogin,
   onOrderClick,
   onHomeClick,
-  onTrackClick,
+  onTrackClick: _onTrackClick,
   onSupportClick,
   isLanding = true,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigateToLandingSection = (selector: string) => {
+    const scrollToTarget = (targetEl: Element) => {
+      const headerOffset = 80;
+      const elementPosition = targetEl.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      window.scrollTo({
+        top: Math.max(0, offsetPosition),
+        behavior: 'smooth',
+      });
+    };
+
     if (!isLanding && onHomeClick) {
       onHomeClick();
       let attempts = 0;
@@ -29,15 +40,17 @@ export const Navbar: React.FC<NavbarProps> = ({
         attempts++;
         const targetEl = document.querySelector(selector);
         if (targetEl) {
-          targetEl.scrollIntoView({ behavior: 'smooth' });
+          scrollToTarget(targetEl);
           clearInterval(interval);
-        } else if (attempts >= 30) {
+        } else if (attempts >= 40) {
           clearInterval(interval);
         }
-      }, 40);
+      }, 50);
     } else {
       const el = document.querySelector(selector);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
+      if (el) {
+        scrollToTarget(el);
+      }
     }
   };
 
@@ -72,82 +85,54 @@ export const Navbar: React.FC<NavbarProps> = ({
               if (onHomeClick) onHomeClick();
               else window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="flex items-center gap-2.5 group transition-transform duration-200 hover:scale-[1.02] text-left focus:outline-none"
+            className="group text-left focus:outline-none cursor-pointer"
             aria-label="TAGTIQUE Home"
           >
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] flex items-center justify-center text-[#1E293B] shadow-[0_4px_12px_rgba(234,217,236,0.6)] group-hover:shadow-[0_6px_16px_rgba(234,217,236,0.85)] border border-white/80 transition-all">
-              <QrCode className="w-5 h-5 stroke-[2.2]" />
-            </div>
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-xl tracking-tight text-[#1A1A1A]">
-                  TAGTIQUE
-                </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-[#EAD9EC]/80 text-[#5C3264] uppercase tracking-wider">
-                  Smart QR
-                </span>
-              </div>
-              <span className="text-[11px] text-[#8A8A8A] font-medium leading-tight hidden sm:inline">
-                Vehicle Contact Shield
-              </span>
-            </div>
+            <BrandLogo size="md" />
           </button>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-7 lg:gap-8">
             <button
-              onClick={() => handleLinkClick('#how-it-works')}
-              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1"
+              onClick={() => {
+                if (onHomeClick) onHomeClick();
+                else window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1 cursor-pointer"
             >
-              How It Works
+              Home
             </button>
             <button
               onClick={() => handleLinkClick('#pricing')}
-              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1"
+              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1 cursor-pointer"
             >
               Pricing
             </button>
             <button
               onClick={() => handleLinkClick('#faq')}
-              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1"
+              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1 cursor-pointer"
             >
               FAQs
-            </button>
-            <button
-              onClick={() => {
-                if (onTrackClick) onTrackClick();
-                else handleLinkClick('#tracking');
-              }}
-              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1"
-            >
-              Track Order
             </button>
             <button
               onClick={() => {
                 if (onSupportClick) onSupportClick();
                 else handleLinkClick('#faq');
               }}
-              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1"
+              className="text-sm font-medium text-[#71717A] hover:text-[#1A1A1A] transition-colors relative py-1 cursor-pointer"
             >
               Support
             </button>
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onLogin}
-              className="px-5 py-2 rounded-full border border-[#D6E0F5] hover:border-[#B89BBF] hover:bg-[#EBF1FC]/50 text-[#2C4875] text-sm font-semibold transition-all active:scale-95 shadow-xs"
-            >
-              Login
-            </button>
+          <div className="hidden md:flex items-center">
             <button
               type="button"
               onClick={handleOrder}
-              className="px-5 py-2 rounded-full bg-gradient-to-r from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] hover:from-[#C8D6F2] hover:to-[#ECC7D2] text-[#1E293B] text-sm font-bold shadow-sm hover:shadow-md transition-all active:scale-95 inline-flex items-center gap-1.5 border border-white/60"
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] hover:from-[#C8D6F2] hover:to-[#ECC7D2] text-[#1E293B] text-sm font-bold shadow-sm hover:shadow-md transition-all active:scale-95 inline-flex items-center gap-1.5 border border-white/60 cursor-pointer"
             >
-              <span>Order your tag</span>
+              <span>Order E-Tag</span>
               <ArrowRight className="w-4 h-4 text-[#1E293B]" />
             </button>
           </div>
@@ -172,10 +157,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="md:hidden border-t border-black/[0.05] bg-white px-5 pt-4 pb-6 shadow-xl animate-in slide-in-from-top duration-200">
           <div className="flex flex-col gap-2">
             <button
-              onClick={() => handleLinkClick('#how-it-works')}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onHomeClick) onHomeClick();
+                else window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
               className="px-3 py-2.5 rounded-xl text-base font-medium text-[#1A1A1A] hover:bg-[#EAD9EC]/40 hover:text-[#5C3264] transition-colors text-left"
             >
-              How It Works
+              Home
             </button>
             <button
               onClick={() => handleLinkClick('#pricing')}
@@ -192,16 +181,6 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
-                if (onTrackClick) onTrackClick();
-                else handleLinkClick('#tracking');
-              }}
-              className="px-3 py-2.5 rounded-xl text-base font-medium text-[#1A1A1A] hover:bg-[#EAD9EC]/40 hover:text-[#5C3264] transition-colors text-left"
-            >
-              Track Order
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
                 if (onSupportClick) onSupportClick();
                 else handleLinkClick('#faq');
               }}
@@ -212,25 +191,13 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="pt-4 border-t border-black/[0.06] flex flex-col gap-2.5">
               <Button
-                variant="outline"
-                fullWidth
-                size="md"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onLogin();
-                }}
-              >
-                Login
-              </Button>
-              <Button
                 variant="primary"
                 fullWidth
                 size="md"
                 onClick={handleOrder}
                 icon={<ArrowRight className="w-4 h-4" />}
               >
-
-                Order your tag
+                Order E-Tag
               </Button>
             </div>
 

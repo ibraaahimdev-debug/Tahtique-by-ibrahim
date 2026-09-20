@@ -3,7 +3,7 @@ import { PRICING_PACKAGES } from '../../../data/mockData';
 import { TAG_MATERIALS, calculateOrderPricing } from '../../../data/orderData';
 import { Card } from '../../../components/common/Card';
 import { Button } from '../../../components/common/Button';
-import { Check, Plus, Minus, Sparkles, Shield, ArrowRight } from 'lucide-react';
+import { Check, Plus, Minus, Star, Layers, Shield, ArrowRight } from 'lucide-react';
 import type { OrderFormData } from '../../../types/order';
 
 interface StepChooseProductProps {
@@ -110,7 +110,7 @@ export const StepChooseProduct: React.FC<StepChooseProductProps> = ({
               >
                 {pkg.popular && (
                   <div className="absolute -top-3 right-4 bg-gradient-to-r from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] text-[#1E293B] text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs flex items-center gap-1 border border-white/80">
-                    <Sparkles className="w-3 h-3 text-[#5C3264]" />
+                    <Star className="w-2.5 h-2.5 fill-current text-[#5C3264]" />
                     <span>Popular</span>
                   </div>
                 )}
@@ -180,7 +180,7 @@ export const StepChooseProduct: React.FC<StepChooseProductProps> = ({
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-xl bg-[#EAD9EC]/60 text-[#5C3264] flex items-center justify-center shrink-0">
                       {mat.id === '3m-sticker' ? (
-                        <Sparkles className="w-4 h-4" />
+                        <Layers className="w-4 h-4" />
                       ) : (
                         <Shield className="w-4 h-4" />
                       )}

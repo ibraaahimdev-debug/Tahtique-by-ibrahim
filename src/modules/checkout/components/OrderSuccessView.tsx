@@ -4,9 +4,9 @@ import { Button } from '../../../components/common/Button';
 import {
   CheckCircle2,
   ShieldCheck,
-  Truck,
   Home,
-  Sparkles,
+  Shield,
+  MessageSquare,
 } from 'lucide-react';
 import type { OrderFormData } from '../../../types/order';
 
@@ -15,7 +15,7 @@ interface OrderSuccessViewProps {
   orderData: OrderFormData;
   totalPaid: number;
   onNavigateHome: () => void;
-  onTrackOrder: (code: string) => void;
+  onTrackOrder?: (code: string) => void;
 }
 
 export const OrderSuccessView: React.FC<OrderSuccessViewProps> = ({
@@ -23,7 +23,7 @@ export const OrderSuccessView: React.FC<OrderSuccessViewProps> = ({
   orderData,
   totalPaid,
   onNavigateHome,
-  onTrackOrder,
+  onTrackOrder: _onTrackOrder,
 }) => {
   return (
     <div className="max-w-3xl mx-auto py-8 sm:py-12 animate-in zoom-in-95 duration-300">
@@ -36,8 +36,8 @@ export const OrderSuccessView: React.FC<OrderSuccessViewProps> = ({
         {/* Big Check Icon */}
         <div className="relative mx-auto w-20 h-20 rounded-3xl bg-gradient-to-tr from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] text-[#1E293B] flex items-center justify-center shadow-[0_10px_30px_rgba(234,217,236,0.7)] mb-6 border border-white/80">
           <CheckCircle2 className="w-10 h-10 stroke-[2.2]" />
-          <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#FFD4E9] text-[#5C3264] flex items-center justify-center border border-white/60">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#5C3264] text-white flex items-center justify-center border border-white/60">
+            <Shield className="w-3 h-3" />
           </div>
         </div>
 
@@ -152,15 +152,17 @@ export const OrderSuccessView: React.FC<OrderSuccessViewProps> = ({
           >
             Back to Home
           </Button>
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => onTrackOrder(orderId)}
-            icon={<Truck className="w-4 h-4" />}
-            className="w-full sm:w-auto"
+          <a
+            href={`https://wa.me/923292082080?text=${encodeURIComponent(
+              `Hello Tagtique! I placed Order #${orderId}. Please update me on my order.`
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-md hover:shadow-lg cursor-pointer active:scale-98"
           >
-            Track Order #{orderId}
-          </Button>
+            <MessageSquare className="w-4 h-4 fill-current" />
+            <span>Contact on WhatsApp: 0329-2082080</span>
+          </a>
         </div>
       </Card>
     </div>

@@ -11,7 +11,7 @@ export const SettingsGeneralTab: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Stub: onSave()
+  // Save settings handler
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);

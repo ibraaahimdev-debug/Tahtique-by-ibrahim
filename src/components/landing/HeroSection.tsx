@@ -26,14 +26,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Hero Body Content */}
         <div className="relative px-6 sm:px-10 lg:px-12 pt-10 sm:pt-14 pb-14 sm:pb-20">
           
-          {/* Subtle Background Blobs inside Canvas */}
-          <div className="absolute top-10 left-1/4 w-[480px] h-[480px] bg-gradient-to-br from-[#D6E0F5]/75 via-[#EBF1FC]/85 to-[#EAD9EC]/60 rounded-full blur-[100px] pointer-events-none" />
-          <div className="absolute -bottom-16 -right-16 w-[540px] h-[540px] bg-gradient-to-tl from-[#D6E0F5]/80 via-[#EBF1FC]/85 to-[#EAD9EC]/70 rounded-full blur-[110px] pointer-events-none" />
-
-          {/* Double slashes decoration in bottom right corner */}
-          <div className="absolute bottom-6 right-8 pointer-events-none select-none z-10 text-white/90 font-black text-5xl sm:text-6xl tracking-[-0.2em] italic drop-shadow-[0_2px_10px_rgba(214,224,245,0.8)]">
-            //
-          </div>
+          {/* Subtle Ambient Lighting inside Canvas */}
+          <div className="absolute top-10 left-1/4 w-[360px] h-[360px] bg-[#D6E0F5]/40 rounded-full blur-[90px] pointer-events-none" />
+          <div className="absolute -bottom-16 -right-16 w-[380px] h-[380px] bg-[#EAD9EC]/35 rounded-full blur-[90px] pointer-events-none" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
             
@@ -101,15 +96,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
             {/* Right Column: GlassQRTag */}
             <div className="lg:col-span-7 relative flex flex-col items-center justify-center py-6 lg:py-0">
-              {/* Diffused color wash directly behind QR Tag card (matching left lavender-blue) */}
-              <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                <div className="absolute -top-4 -left-10 w-[360px] h-[360px] rounded-full bg-gradient-to-br from-[#D6E0F5]/70 via-[#EBF1FC]/75 to-[#EAD9EC]/50 blur-[75px]" />
-                <div className="absolute -bottom-8 -right-8 w-[400px] h-[400px] rounded-full bg-gradient-to-tl from-[#D6E0F5]/70 via-[#EBF1FC]/75 to-[#EAD9EC]/50 blur-[85px]" />
-              </div>
               <GlassQRTag
-                value="https://yourwebsite.com/contact/vehicle-123"
-                title="Scan QR Code"
-                subtitle="Scan to privately contact the vehicle owner"
+                value={typeof window !== 'undefined' ? `${window.location.origin}/#v/demo` : 'https://tagtique.pk/v/demo'}
+                title="TAGTIQUE SMART SHIELD"
+                subtitle="Scan with any smartphone camera to contact vehicle owner"
               />
             </div>
 

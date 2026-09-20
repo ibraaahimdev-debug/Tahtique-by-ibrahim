@@ -15,7 +15,7 @@ export const FAQSection: React.FC<FAQSectionProps> = ({ onContactClick }) => {
   };
 
   return (
-    <section id="faq" className="py-20 md:py-28 relative overflow-hidden scroll-mt-6 bg-transparent">
+    <section id="faq" className="py-20 md:py-28 relative overflow-hidden scroll-mt-24 bg-transparent">
 
       <span id="faqs" className="sr-only" />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-0">

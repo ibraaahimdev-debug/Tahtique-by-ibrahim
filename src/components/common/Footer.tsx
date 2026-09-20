@@ -1,5 +1,6 @@
 import React from 'react';
-import { QrCode, Shield, Mail, Phone, MapPin, Heart } from 'lucide-react';
+import { Shield, Mail, MapPin, Heart, MessageSquare } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 
 interface FooterProps {
   onTrackOrder?: () => void;
@@ -9,7 +10,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({
-  onAdminClick,
+  onAdminClick: _onAdminClick,
   onHomeClick,
 }) => {
   return (
@@ -24,19 +25,9 @@ export const Footer: React.FC<FooterProps> = ({
                 if (onHomeClick) onHomeClick();
                 else window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="flex items-center gap-2.5 focus:outline-none text-left group"
+              className="focus:outline-none text-left group cursor-pointer"
             >
-              <div className="w-9 h-9 rounded-2xl bg-gradient-to-br from-[#D6E0F5] via-[#EAD9EC] to-[#F3D6DE] flex items-center justify-center text-[#1E293B] shadow-xs group-hover:scale-105 transition-transform border border-white/80">
-                <QrCode className="w-5 h-5 stroke-[2.2]" />
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-extrabold text-xl tracking-tight text-[#1A1A1A]">
-                  TAGTIQUE
-                </span>
-                <span className="text-[10px] font-bold text-[#5C3264] bg-[#EAD9EC]/60 px-1.5 py-0.5 rounded">
-                  PAKISTAN
-                </span>
-              </div>
+              <BrandLogo size="md" />
             </button>
             <p className="text-sm text-gray-500 max-w-sm leading-relaxed">
               Your car's smart contact card — connect with anyone who needs to reach you without ever exposing your private mobile number. 100% one-time charges in PKR.
@@ -54,20 +45,25 @@ export const Footer: React.FC<FooterProps> = ({
             </h4>
             <div className="space-y-3 text-sm text-gray-600">
               <div className="flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-[#25D366] shrink-0" />
+                <a
+                  href="https://wa.me/923292082080"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-emerald-700 hover:text-emerald-800 hover:underline transition-colors flex items-center gap-1"
+                >
+                  WhatsApp: 0329-2082080
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#5C3264] shrink-0" />
                 <a href="mailto:ataitsolutions09@gmail.com" className="hover:text-[#5C3264] transition-colors">
                   ataitsolutions09@gmail.com
                 </a>
               </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#5C3264] shrink-0" />
-                <a href="tel:03292082080" className="hover:text-[#5C3264] transition-colors">
-                  0329-2082080
-                </a>
-              </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-[#5C3264] shrink-0 mt-0.5" />
-                <span>Office No. 11, Blue Bell Tower, 208 Chak Road</span>
+                <span>208 Chak Road, Blue Bell Road, Canal Road, FSD</span>
               </div>
             </div>
           </div>
@@ -81,13 +77,6 @@ export const Footer: React.FC<FooterProps> = ({
             <span className="flex items-center gap-1">
               Crafted with <Heart className="w-3.5 h-3.5 text-[#F3D6DE] fill-[#EAD9EC]" /> for driver safety in Pakistan
             </span>
-            <span>•</span>
-            <button
-              onClick={onAdminClick}
-              className="text-gray-700 hover:text-[#5C3264] font-semibold underline transition-colors focus:outline-none"
-            >
-              Admin Portal
-            </button>
           </div>
         </div>
       </div>

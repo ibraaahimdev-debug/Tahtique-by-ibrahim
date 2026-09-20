@@ -5,7 +5,6 @@ import {
   ShoppingCart,
   Smartphone,
   Printer,
-  Sparkles,
   ArrowRight,
   X,
   ShieldCheck,
@@ -26,7 +25,7 @@ interface HowItWorksProps {
 
 export const HowItWorks: React.FC<HowItWorksProps> = ({
   onOrderClick,
-  onNavigateToTracking,
+  onNavigateToTracking: _onNavigateToTracking,
 }) => {
   const [activeModalStep, setActiveModalStep] = useState<number | null>(null);
 
@@ -43,7 +42,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
     <ShoppingCart className="w-6 h-6 text-[#5C3264]" />,
     <Smartphone className="w-6 h-6 text-[#5C3264]" />,
     <Printer className="w-6 h-6 text-[#5C3264]" />,
-    <Sparkles className="w-6 h-6 text-[#5C3264]" />,
+    <ShieldCheck className="w-6 h-6 text-[#5C3264]" />,
   ];
 
   const handleCardClick = (stepNumber: number) => {
@@ -60,20 +59,20 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
   };
 
   return (
-    <section id="how-it-works" className="py-20 md:py-28 relative overflow-hidden bg-transparent font-sans scroll-mt-6">
+    <section id="how-it-works" className="py-20 md:py-28 relative overflow-hidden bg-transparent font-sans scroll-mt-24">
       <span id="product" className="sr-only" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <span className="text-xs sm:text-sm font-semibold text-[#5C3264] uppercase tracking-wider bg-gradient-to-r from-[#D6E0F5]/80 via-[#EAD9EC]/80 to-[#F3D6DE]/80 px-3.5 py-1.5 rounded-full inline-block border border-white/60 shadow-xs">
-            Interactive 4-Step Process
+            Simple 4-Step Process
           </span>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1A1A1A] tracking-tight">
             How Tagtique Works
           </h2>
           <p className="text-base sm:text-lg text-[#71717A] font-normal leading-relaxed">
-            Click any step below to test its interactive simulation and see how easy it is to protect your vehicle.
+            From ordering your tag to total vehicle privacy on the road — fully configured in minutes.
           </p>
         </div>
 
@@ -113,7 +112,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
                 <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between text-xs font-semibold text-[#5C3264]">
                   <span>Step {index + 1} of 4</span>
                   <span className="inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                    <span>Try Demo</span>
+                    <span>Explore Step</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </div>
@@ -387,17 +386,14 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
                 </div>
 
                 <div className="flex gap-3">
-                  <Button
-                    variant="outline"
-                    size="md"
-                    onClick={() => {
-                      setActiveModalStep(null);
-                      if (onNavigateToTracking) onNavigateToTracking('TGT-000482');
-                    }}
-                    className="flex-1"
+                  <a
+                    href="https://wa.me/923292082080"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-2.5 px-4 rounded-full border border-[#25D366] text-emerald-700 hover:bg-emerald-50 text-sm font-semibold transition-all text-center flex items-center justify-center gap-1.5"
                   >
-                    Test Live Tracking Demo
-                  </Button>
+                    <span>WhatsApp: 0329-2082080</span>
+                  </a>
                   <Button
                     variant="primary"
                     size="md"
@@ -413,16 +409,16 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({
               </div>
             )}
 
-            {/* MODAL CONTENT: STEP 4 (Interactive Bystander Scanner Simulator) */}
+            {/* MODAL CONTENT: STEP 4 (Interactive Bystander Scanner Simulation) */}
             {activeModalStep === 4 && (
               <div className="space-y-5">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#D6E0F5] to-[#EAD9EC] text-[#5C3264] flex items-center justify-center shrink-0 shadow-xs">
-                    <Sparkles className="w-6 h-6" />
+                    <ShieldCheck className="w-6 h-6" />
                   </div>
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-[#5C3264]">
-                      Step 04 Live Bystander Simulation
+                      Step 04 Live Bystander Interaction
                     </span>
                     <h3 className="text-xl font-bold text-[#1A1A1A]">
                       What Someone Sees When Scanning

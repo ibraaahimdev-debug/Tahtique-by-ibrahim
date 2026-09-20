@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { QrCode } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 
 export interface GlassQRTagProps {
@@ -13,9 +12,9 @@ export interface GlassQRTagProps {
 }
 
 export const GlassQRTag: React.FC<GlassQRTagProps> = ({
-  value = 'https://yourwebsite.com/contact/vehicle-123',
-  title = 'Scan QR Code',
-  subtitle = 'Scan to privately contact the vehicle owner',
+  value = typeof window !== 'undefined' ? `${window.location.origin}/#v/demo` : 'https://tagtique.pk/v/demo',
+  title = 'TAGTIQUE SMART SHIELD',
+  subtitle = 'Scan with any phone camera to contact vehicle owner',
   qrSize = 200,
   standalone = false,
   interactive = true,
@@ -48,16 +47,10 @@ export const GlassQRTag: React.FC<GlassQRTagProps> = ({
       className={`relative flex flex-col items-center justify-center select-none ${className}`}
       style={{ perspective: '1200px' }}
     >
-      {/* Ambient Color Glow Behind Glass to make Transparent Refraction Visible */}
+      {/* Ambient Lighting Behind Tag */}
       <div className="absolute inset-0 pointer-events-none -z-10 flex items-center justify-center">
-        {/* Soft cool lavender-blue aura on the left and upper left */}
-        <div className="absolute -top-12 -left-16 w-[380px] h-[380px] rounded-full bg-gradient-to-br from-[#D6E0F5]/60 via-[#EAD9EC]/50 to-[#EBF1FC]/60 blur-[75px] pointer-events-none" />
-        
-        {/* Soft lavender-blue & lilac aura on the bottom-right (matching left) */}
-        <div className="absolute -bottom-14 -right-16 w-[420px] h-[420px] rounded-full bg-gradient-to-tl from-[#D6E0F5]/70 via-[#EBF1FC]/75 to-[#EAD9EC]/60 blur-[85px] pointer-events-none" />
-        
-        {/* Central luminous pearl halo directly behind QR code */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] h-[280px] rounded-full bg-white/80 blur-[50px] pointer-events-none" />
+        <div className="absolute -top-10 -left-10 w-[320px] h-[320px] rounded-full bg-gradient-to-br from-[#D6E0F5]/50 to-[#EAD9EC]/40 blur-[60px] pointer-events-none" />
+        <div className="absolute -bottom-10 -right-10 w-[340px] h-[340px] rounded-full bg-gradient-to-tl from-[#EAD9EC]/50 to-[#D6E0F5]/40 blur-[60px] pointer-events-none" />
       </div>
 
       {/* 3D FLOATING ASSEMBLY */}
@@ -66,128 +59,128 @@ export const GlassQRTag: React.FC<GlassQRTagProps> = ({
         style={{
           transformStyle: 'preserve-3d',
           transform: isHovered
-            ? `rotateX(${14 + mouseOffset.y}deg) rotateY(${-14 + mouseOffset.x}deg) rotateZ(1deg) translateY(${mouseOffset.y * 0.25}px)`
-            : 'rotateX(12deg) rotateY(-12deg) rotateZ(1deg) translateY(0px)',
+            ? `rotateX(${12 + mouseOffset.y}deg) rotateY(${-12 + mouseOffset.x}deg) rotateZ(1deg) translateY(${mouseOffset.y * 0.25}px)`
+            : 'rotateX(10deg) rotateY(-10deg) rotateZ(0.5deg) translateY(0px)',
           animation: isHovered ? 'none' : 'hero-qr-float 6s ease-in-out infinite',
         }}
       >
-        {/* MAIN 3D TRANSPARENT GLASS SLAB */}
+        {/* MAIN 3D AUTOMOTIVE GLASS / ACRYLIC SLAB */}
         <div
           className="
             relative
-            w-full max-w-[380px] sm:max-w-[390px]
-            rounded-[34px]
-            p-7 sm:p-8
-            border border-white/80
-            bg-gradient-to-br from-white/[0.22] via-white/[0.14] to-[#D6E0F5]/[0.18]
+            w-full max-w-[360px] sm:max-w-[380px]
+            rounded-[32px]
+            p-6 sm:p-7
+            border border-white/90
+            bg-gradient-to-br from-white/[0.85] via-white/[0.65] to-[#F3EDF5]/[0.8]
             backdrop-blur-[24px]
             overflow-hidden
+            shadow-[0_20px_50px_-10px_rgba(92,50,100,0.18)]
           "
           style={{
             transformStyle: 'preserve-3d',
             transform: 'translateZ(0px)',
-            boxShadow:
-              '0 1px 0 rgba(255,255,255,1), 0 3px 0 rgba(226,232,240,0.7), 0 6px 0 rgba(203,213,225,0.45), 0 9px 1px rgba(148,163,184,0.3), 0 25px 60px -10px rgba(214, 224, 245, 0.45), 0 15px 35px -10px rgba(235, 241, 252, 0.5), inset 0 1.5px 2px 0 rgba(255,255,255,0.95), inset 0 -2px 4px 0 rgba(214, 224, 245, 0.15)',
           }}
         >
-          {/* Glass diagonal specular glare sweep */}
+          {/* Subtle Specular Glare Sweep */}
           <div
             className="
               absolute
-              -top-28
+              -top-24
               -left-20
-              w-[520px]
-              h-[200px]
-              rotate-[-22deg]
+              w-[500px]
+              h-[180px]
+              rotate-[-25deg]
               bg-gradient-to-b
-              from-white/40
-              via-white/15
+              from-white/60
+              via-white/20
               to-transparent
               blur-xl
               pointer-events-none
             "
           />
 
-          {/* Top glass bevel edge highlight */}
-          <div className="absolute inset-x-8 top-0 h-[1.5px] bg-gradient-to-r from-transparent via-white/95 to-transparent" />
-
           {/* 3D CONTENT STACK */}
-          <div className="relative z-10" style={{ transformStyle: 'preserve-3d' }}>
-            {/* Header */}
+          <div className="relative z-10 space-y-4" style={{ transformStyle: 'preserve-3d' }}>
+            {/* Top Specification Banner (Automotive Hardware Marking) */}
             <div
-              className="text-center mb-6"
+              className="flex items-center justify-between border-b border-black/[0.08] pb-3"
+              style={{ transform: 'translateZ(18px)' }}
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-mono font-bold tracking-widest text-[#1E293B] uppercase">
+                  3M™ AUTOMOTIVE GLASS SHIELD
+                </span>
+              </div>
+              <span className="text-[9px] font-mono font-bold text-[#5C3264] bg-[#EAD9EC]/70 px-2 py-0.5 rounded">
+                PKR RELAY
+              </span>
+            </div>
+
+            {/* Inner Tag Header */}
+            <div
+              className="text-center"
               style={{
-                transform: 'translateZ(20px)',
+                transform: 'translateZ(22px)',
                 transformStyle: 'preserve-3d',
               }}
             >
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-xl bg-white/40 border border-white/60 shadow-xs flex items-center justify-center backdrop-blur-md">
-                  <QrCode size={19} strokeWidth={2} className="text-slate-800" />
-                </div>
-                <h2 className="text-[21px] sm:text-[22px] font-semibold tracking-[-0.02em] text-slate-900">
-                  {title}
-                </h2>
-              </div>
-              <p className="text-[12px] sm:text-[13px] text-slate-500 font-medium">
+              <h2 className="text-base sm:text-lg font-black tracking-tight text-[#1A1A1A] uppercase">
+                {title}
+              </h2>
+              <p className="text-[11px] text-gray-500 font-medium mt-0.5">
                 {subtitle}
               </p>
             </div>
 
-            {/* 3D FROSTED INNER GLASS HOLDER */}
+            {/* OPTICAL WAFER FOR 100% RELIABLE SCANNING */}
             <div
               className="
                 mx-auto
                 w-full
-                max-w-[300px]
+                max-w-[260px]
                 aspect-square
-                flex items-center justify-center
-                rounded-[28px]
-                border border-white/90
-                bg-gradient-to-br from-white/[0.35] via-white/[0.24] to-[#EBF1FC]/[0.30]
-                backdrop-blur-[20px]
-                p-5 sm:p-6
-                transition-all duration-300
+                flex flex-col items-center justify-center
+                rounded-2xl
+                border border-black/[0.08]
+                bg-white
+                p-4 sm:p-5
+                shadow-[0_8px_25px_-6px_rgba(0,0,0,0.12)]
+                relative
               "
               style={{
-                transform: 'translateZ(24px)',
+                transform: 'translateZ(26px)',
                 transformStyle: 'preserve-3d',
-                boxShadow:
-                  '0 12px 30px -6px rgba(214, 224, 245, 0.4), 0 8px 20px -4px rgba(235, 241, 252, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.95), inset 0 -2px 4px rgba(0, 0, 0, 0.03)',
               }}
             >
-              {/* WHITE OPTICAL WAFER FOR 100% RELIABLE SCANNING */}
-              <div
-                className="
-                  w-full
-                  h-full
-                  flex items-center justify-center
-                  rounded-[18px]
-                  bg-white/95
-                  p-3.5
-                  border border-white
-                "
-                style={{
-                  transform: 'translateZ(14px)',
-                  boxShadow:
-                    '0 8px 20px -4px rgba(15, 23, 42, 0.08), inset 0 1px 1px rgba(255, 255, 255, 1)',
-                }}
-              >
-                <QRCodeSVG
-                  value={value}
-                  size={qrSize}
-                  className="w-full h-full max-w-[210px] max-h-[210px]"
-                  bgColor="transparent"
-                  fgColor="#0F172A"
-                  level="H"
-                  includeMargin={false}
-                />
-              </div>
+              {/* Corner Registration Reticles (Engineering Alignment) */}
+              <div className="absolute top-2 left-2 w-2 h-2 border-t-2 border-l-2 border-[#5C3264]" />
+              <div className="absolute top-2 right-2 w-2 h-2 border-t-2 border-r-2 border-[#5C3264]" />
+              <div className="absolute bottom-2 left-2 w-2 h-2 border-b-2 border-l-2 border-[#5C3264]" />
+              <div className="absolute bottom-2 right-2 w-2 h-2 border-b-2 border-r-2 border-[#5C3264]" />
+
+              <QRCodeSVG
+                value={value}
+                size={qrSize}
+                className="w-full h-full max-w-[190px] max-h-[190px]"
+                bgColor="transparent"
+                fgColor="#0F172A"
+                level="H"
+                includeMargin={false}
+              />
+            </div>
+
+            {/* Bottom Hardware Serial Strip */}
+            <div
+              className="pt-2 border-t border-black/[0.06] flex items-center justify-between text-[10px] text-gray-500 font-mono"
+              style={{ transform: 'translateZ(18px)' }}
+            >
+              <span className="font-bold text-[#5C3264]">ID: TGT-PK-492</span>
+              <span>NO APP REQUIRED</span>
+              <span className="font-semibold text-emerald-700">AES-256 RELAY</span>
             </div>
           </div>
-
-          {/* Bottom glass highlight line with soft lavender-to-sky glow */}
-          <div className="absolute bottom-0 inset-x-8 h-[1.5px] bg-gradient-to-r from-transparent via-white/80 via-[#D6E0F5]/80 to-transparent" />
         </div>
       </div>
 

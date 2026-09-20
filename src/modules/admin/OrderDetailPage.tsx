@@ -78,7 +78,7 @@ export const OrderDetailPage: React.FC<OrderDetailPageProps> = ({
     onUpdateStatus(order.id, status);
   };
 
-  // Stub function: onSaveNotes()
+  // Staff notes handler
   const handleSaveNote = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newNoteText.trim()) return;

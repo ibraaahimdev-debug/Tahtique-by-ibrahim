@@ -10,7 +10,6 @@ import {
   ArrowLeft,
   Copy,
   AlertCircle,
-  Sparkles,
   CheckCircle2,
 } from 'lucide-react';
 import type { OrderFormData, VehicleDetails } from '../../../types/order';
@@ -414,8 +413,8 @@ export const StepVehicleDetails: React.FC<StepVehicleDetailsProps> = ({
             <div className="space-y-3 flex-1 text-center lg:text-left">
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
                 <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#5C3264] bg-[#EAD9EC]/70 px-2.5 py-0.5 rounded-md">
-                  <Sparkles className="w-3 h-3" />
-                  Auto-Reactive QR Generator
+                  <ShieldCheck className="w-3 h-3" />
+                  Encrypted QR Generator
                 </span>
                 {activeRecord?.qr_svg_url && (
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
