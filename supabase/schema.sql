@@ -98,17 +98,20 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('qr-codes', 'qr-codes', true)
 ON CONFLICT (id) DO UPDATE SET public = true;
 
--- Bucket RLS policies
+-- Storage policies with idempotent drop checks
+DROP POLICY IF EXISTS "Public can view QR code images" ON storage.objects;
 CREATE POLICY "Public can view QR code images"
     ON storage.objects
     FOR SELECT
     USING (bucket_id = 'qr-codes');
 
+DROP POLICY IF EXISTS "Public & authenticated can upload QR code images" ON storage.objects;
 CREATE POLICY "Public & authenticated can upload QR code images"
     ON storage.objects
     FOR INSERT
     WITH CHECK (bucket_id = 'qr-codes');
 
+DROP POLICY IF EXISTS "Admins can manage QR code images" ON storage.objects;
 CREATE POLICY "Admins can manage QR code images"
     ON storage.objects
     FOR ALL
@@ -122,54 +125,66 @@ ALTER TABLE public.vehicles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
 
--- CUSTOMERS: Allow insertion during checkout; allow authenticated read & update
+-- CUSTOMERS POLICIES
+DROP POLICY IF EXISTS "Allow public customer creation on checkout" ON public.customers;
 CREATE POLICY "Allow public customer creation on checkout"
     ON public.customers FOR INSERT
     WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Allow authenticated read on customers" ON public.customers;
 CREATE POLICY "Allow authenticated read on customers"
     ON public.customers FOR SELECT
     USING (true);
 
+DROP POLICY IF EXISTS "Allow update on customers" ON public.customers;
 CREATE POLICY "Allow update on customers"
     ON public.customers FOR UPDATE
     USING (true);
 
--- VEHICLES: Allow insertion during checkout; allow read & update
+-- VEHICLES POLICIES
+DROP POLICY IF EXISTS "Allow public vehicle creation on checkout" ON public.vehicles;
 CREATE POLICY "Allow public vehicle creation on checkout"
     ON public.vehicles FOR INSERT
     WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Allow read on vehicles" ON public.vehicles;
 CREATE POLICY "Allow read on vehicles"
     ON public.vehicles FOR SELECT
     USING (true);
 
+DROP POLICY IF EXISTS "Allow update on vehicles" ON public.vehicles;
 CREATE POLICY "Allow update on vehicles"
     ON public.vehicles FOR UPDATE
     USING (true);
 
--- TAGS: Allow read for anyone looking up a tag by qr_code_value
+-- TAGS POLICIES
+DROP POLICY IF EXISTS "Allow public read of tags by qr_code_value" ON public.tags;
 CREATE POLICY "Allow public read of tags by qr_code_value"
     ON public.tags FOR SELECT
     USING (true);
 
+DROP POLICY IF EXISTS "Allow public tag creation on checkout" ON public.tags;
 CREATE POLICY "Allow public tag creation on checkout"
     ON public.tags FOR INSERT
     WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Allow update on tags" ON public.tags;
 CREATE POLICY "Allow update on tags"
     ON public.tags FOR UPDATE
     USING (true);
 
--- ORDERS: Allow insertion on checkout; allow read & update
+-- ORDERS POLICIES
+DROP POLICY IF EXISTS "Allow order creation on checkout" ON public.orders;
 CREATE POLICY "Allow order creation on checkout"
     ON public.orders FOR INSERT
     WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Allow read on orders" ON public.orders;
 CREATE POLICY "Allow read on orders"
     ON public.orders FOR SELECT
     USING (true);
 
+DROP POLICY IF EXISTS "Allow update on orders" ON public.orders;
 CREATE POLICY "Allow update on orders"
     ON public.orders FOR UPDATE
     USING (true);
@@ -190,13 +205,31 @@ CREATE INDEX IF NOT EXISTS idx_tag_scans_scanned_at ON public.tag_scans (scanned
 
 ALTER TABLE public.tag_scans ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Allow public insert to tag_scans" ON public.tag_scans;
 CREATE POLICY "Allow public insert to tag_scans"
     ON public.tag_scans FOR INSERT
     WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Allow read of tag_scans" ON public.tag_scans;
 CREATE POLICY "Allow read of tag_scans"
     ON public.tag_scans FOR SELECT
     USING (true);
+
+-- ==============================================================================
+-- Realtime Publication: Enable Postgres changes for tables
+-- ==============================================================================
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_publication_tables 
+        WHERE pubname = 'supabase_realtime' AND tablename = 'tags'
+    ) THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE public.customers, public.vehicles, public.tags, public.orders;
+    END IF;
+EXCEPTION WHEN OTHERS THEN
+    -- Ignore if publication is managed by supabase dashboard
+    NULL;
+END $$;
 
 -- ==============================================================================
 -- 10. RPC Function: Public Minimal Relay Lookup
